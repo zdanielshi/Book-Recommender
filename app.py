@@ -8,10 +8,11 @@ api_key = st.secrets["api_key"]
 # Initialize OpenAI client with the API key
 client = OpenAI(api_key = api_key)
 
-# Create the Streamlit interface
-st.title("Book Recommender")
-
-user_input = st.text_area("Enter a list of your favorite books")
+# Function to load "About" content
+def load_about():
+  with open('about.txt', 'r') as file:
+    about_text = file.read()
+  return about_text
 
 # Function to get book recommendations
 def get_recommendations(user_books):
@@ -51,6 +52,14 @@ def get_recommendations(user_books):
     presence_penalty=0
   )
   return response.choices[0].message.content
+
+# Create the Streamlit interface
+st.title("Book Recommender")
+
+user_input = st.text_area("Enter a list of your favorite books, and any other requirements you might have")
+
+about_section = load_about()
+st.sidebar.markdown(about_section, unsafe_allow_html = True)
 
 # Button to trigger the recommendation query
 if st.button ("Get recommendations"):
